@@ -20,10 +20,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import {
   type Investigador,
   especialidades,
-  defaultInvestigadores,
 } from "@/data/investigadores";
-
-const INV_KEY = "sg_investigadores";
 
 export default function InvestigadoresPage() {
   const { user } = useAuth();
@@ -41,20 +38,30 @@ export default function InvestigadoresPage() {
   const [telefono, setTelefono] = useState("");
   const [institucion, setInstitucion] = useState("");
   const [link, setLink] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem(INV_KEY);
-    if (stored) {
-      try {
-        setInvestigadores(JSON.parse(stored));
-      } catch {
-        setInvestigadores(defaultInvestigadores);
-        localStorage.setItem(INV_KEY, JSON.stringify(defaultInvestigadores));
-      }
-    } else {
-      setInvestigadores(defaultInvestigadores);
-      localStorage.setItem(INV_KEY, JSON.stringify(defaultInvestigadores));
-    }
+    fetch("/api/investigadores")
+      .then((res) => res.json())
+      .then((data) => {
+        // Map DB fields to frontend interface
+        const mapped = data.map?.((row: Record<string, string>) => ({
+          id: String(row.id),
+          nombre: row.nombre,
+          apellido: row.apellido,
+          especialidad: row.especialidad,
+          especialidadOtra: "",
+          email: row.email,
+          telefono: row.telefono || "",
+          institucion: row.institucion || "",
+          link: row.link || "",
+          creadoPor: "sistema",
+        })) || [];
+        setInvestigadores(mapped);
+      })
+      .catch(() => setInvestigadores([]))
+      .finally(() => setLoading(false));
   }, []);
 
   const filtered =
@@ -74,25 +81,50 @@ export default function InvestigadoresPage() {
     setShowForm(false);
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!nombre.trim() || !apellido.trim() || !email.trim()) return;
-    const nuevo: Investigador = {
-      id: `inv-user-${Date.now()}`,
-      nombre: nombre.trim(),
-      apellido: apellido.trim(),
-      especialidad,
-      especialidadOtra: especialidad === "otra" ? especialidadOtra.trim() : "",
-      email: email.trim(),
-      telefono: telefono.trim(),
-      institucion: institucion.trim(),
-      link: link.trim(),
-      creadoPor: user?.nombre || "anon",
-    };
-    const updated = [nuevo, ...investigadores];
-    setInvestigadores(updated);
-    localStorage.setItem(INV_KEY, JSON.stringify(updated));
-    resetForm();
+    setSaving(true);
+    try {
+      const espFinal =
+        especialidad === "otra" && especialidadOtra.trim()
+          ? especialidadOtra.trim()
+          : especialidad;
+      const res = await fetch("/api/investigadores", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: nombre.trim(),
+          apellido: apellido.trim(),
+          especialidad: espFinal,
+          email: email.trim(),
+          telefono: telefono.trim(),
+          institucion: institucion.trim(),
+          link: link.trim(),
+        }),
+      });
+      if (!res.ok) throw new Error("Error al guardar");
+      const row = await res.json();
+      const nuevo: Investigador = {
+        id: String(row.id),
+        nombre: row.nombre,
+        apellido: row.apellido,
+        especialidad: row.especialidad,
+        especialidadOtra: "",
+        email: row.email,
+        telefono: row.telefono || "",
+        institucion: row.institucion || "",
+        link: row.link || "",
+        creadoPor: "sistema",
+      };
+      setInvestigadores([nuevo, ...investigadores]);
+      resetForm();
+    } catch (err) {
+      alert("Error al guardar el investigador. Intentá de nuevo.");
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
   }
 
   const espLabel = (value: string, otra: string) => {
@@ -260,9 +292,10 @@ export default function InvestigadoresPage() {
           </div>
           <button
             type="submit"
-            className="mt-4 rounded-lg bg-indigo-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
+            disabled={saving}
+            className="mt-4 rounded-lg bg-indigo-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
           >
-            Guardar
+            {saving ? "Guardando..." : "Guardar"}
           </button>
         </form>
       )}
@@ -476,9 +509,14 @@ export default function InvestigadoresPage() {
         ))}
       </div>
 
-      {filtered.length === 0 && (
+      {loading && (
         <div className="py-16 text-center text-gray-400">
-          No hay investigadores en esta categor&iacute;a.
+          Cargando investigadores...
+        </div>
+      )}
+      {!loading && filtered.length === 0 && (
+        <div className="py-16 text-center text-gray-400">
+          No hay investigadores en esta categor&iacute;a. &iexcl;S&eacute; el primero en registrarte!
         </div>
       )}
     </main>
