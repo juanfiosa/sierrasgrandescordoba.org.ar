@@ -394,19 +394,34 @@ export default function MapView({ className, interactive = true }: MapViewProps)
 
       {interactive && (
         <>
-          {/* Layers panel — top-left */}
+          {/* Capas temáticas — panel unificado (toggle + leyenda) */}
           <div className="absolute left-3 top-3 z-10">
             <button
               onClick={() => setShowPanel(!showPanel)}
               className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm font-medium shadow-md hover:bg-gray-50"
             >
               <Layers className="h-4 w-4" />
-              Capas
+              Capas temáticas
             </button>
 
             {showPanel && (
-              <div className="mt-2 w-60 rounded-lg bg-white p-3 shadow-lg">
-                <h3 className="mb-2 text-xs font-semibold uppercase text-gray-500">Capas temáticas</h3>
+              <div className="mt-2 w-64 rounded-lg bg-white p-3 shadow-lg">
+                {/* Área de estudio — siempre visible, no togglable */}
+                <div className="mb-1 flex items-center gap-2 px-2 py-1">
+                  <svg width="20" height="10" className="shrink-0">
+                    <line
+                      x1="0" y1="5" x2="20" y2="5"
+                      stroke="#dc2626"
+                      strokeWidth="1.5"
+                      strokeDasharray="4,3"
+                    />
+                  </svg>
+                  <span className="text-sm text-gray-600">Límite área de estudio</span>
+                </div>
+
+                <hr className="my-1.5 border-gray-200" />
+
+                {/* Capas togglables */}
                 {layers.map((layer) => (
                   <button
                     key={layer.id}
@@ -418,71 +433,39 @@ export default function MapView({ className, interactive = true }: MapViewProps)
                     ) : (
                       <EyeOff className="h-4 w-4 text-gray-400" />
                     )}
-                    <span className="h-3 w-3 rounded-sm" style={{ backgroundColor: layer.color }} />
+                    {layer.type === "fill" ? (
+                      <svg width="14" height="14" className="shrink-0">
+                        <rect
+                          x="1" y="1" width="12" height="12" rx="2"
+                          fill={layer.color}
+                          fillOpacity={0.4}
+                          stroke={layer.color}
+                          strokeWidth="1"
+                        />
+                      </svg>
+                    ) : layer.type === "line" ? (
+                      <svg width="14" height="14" className="shrink-0">
+                        <line
+                          x1="1" y1="7" x2="13" y2="7"
+                          stroke={layer.color}
+                          strokeWidth="2.5"
+                        />
+                      </svg>
+                    ) : (
+                      <svg width="14" height="14" className="shrink-0">
+                        <circle
+                          cx="7" cy="7" r="5"
+                          fill={layer.color}
+                          stroke="white"
+                          strokeWidth="1.5"
+                        />
+                      </svg>
+                    )}
                     {layer.label}
                   </button>
                 ))}
               </div>
             )}
-          </div>
-
-          {/* Legend — cartographic style — top-right below nav controls */}
-          <div className="absolute right-3 top-28 z-10">
-            <div className="rounded-lg border border-gray-300 bg-white/95 px-3 py-2.5 shadow-sm backdrop-blur-sm">
-              <h4 className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                Referencias
-              </h4>
-              <div className="space-y-1">
-                {/* Área de estudio */}
-                <div className="flex items-center gap-2">
-                  <svg width="24" height="10" className="shrink-0">
-                    <line
-                      x1="0" y1="5" x2="24" y2="5"
-                      stroke="#dc2626"
-                      strokeWidth="1.5"
-                      strokeDasharray="4,3"
-                    />
-                  </svg>
-                  <span className="text-[11px] text-gray-700">Límite área de estudio</span>
-                </div>
-                {/* Dynamic layer items */}
-                {layers
-                  .filter((l) => l.visible)
-                  .map((layer) => (
-                    <div key={layer.id} className="flex items-center gap-2">
-                      {layer.type === "fill" ? (
-                        <svg width="24" height="10" className="shrink-0">
-                          <rect
-                            x="0" y="0" width="24" height="10" rx="1"
-                            fill={layer.color}
-                            fillOpacity={0.4}
-                            stroke={layer.color}
-                            strokeWidth="1"
-                          />
-                        </svg>
-                      ) : layer.type === "line" ? (
-                        <svg width="24" height="10" className="shrink-0">
-                          <line
-                            x1="0" y1="5" x2="24" y2="5"
-                            stroke={layer.color}
-                            strokeWidth="2.5"
-                          />
-                        </svg>
-                      ) : (
-                        <svg width="24" height="10" className="shrink-0">
-                          <circle
-                            cx="12" cy="5" r="4"
-                            fill={layer.color}
-                            stroke="white"
-                            strokeWidth="1.5"
-                          />
-                        </svg>
-                      )}
-                      <span className="text-[11px] text-gray-700">{layer.label}</span>
-                    </div>
-                  ))}
-              </div>
-            </div>
           </div>
 
           {/* Base map style switcher — bottom-left */}
