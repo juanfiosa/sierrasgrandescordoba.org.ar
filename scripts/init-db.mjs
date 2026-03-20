@@ -56,6 +56,23 @@ async function main() {
   `;
   console.log("  ✓ alojamientos");
 
+  // ── Miembros (Quiénes Somos) ──
+  await sql`
+    CREATE TABLE IF NOT EXISTS miembros (
+      id            SERIAL PRIMARY KEY,
+      nombre        TEXT NOT NULL,
+      apellido      TEXT NOT NULL,
+      rol           TEXT NOT NULL DEFAULT '',
+      bio           TEXT DEFAULT '',
+      foto_url      TEXT DEFAULT '',
+      cv_url        TEXT DEFAULT '',
+      email         TEXT DEFAULT '',
+      orden         INT DEFAULT 0,
+      created_at    TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
+  console.log("  ✓ miembros");
+
   // ── Seed investigadores (vacío por ahora) ──
 
   // ── Seed organizaciones ──

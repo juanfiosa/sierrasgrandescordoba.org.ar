@@ -32,6 +32,7 @@ const links = [
   { href: "/empresas", label: "Empresas", icon: Briefcase },
   { href: "/alojamientos", label: "Alojamientos", icon: Tent },
   { href: "/investigadores", label: "Investigadores", icon: GraduationCap },
+  { href: "/quienes-somos", label: "Quiénes Somos", icon: Users },
 ];
 
 export default function Navbar() {
