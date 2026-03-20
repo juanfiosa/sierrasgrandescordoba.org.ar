@@ -172,15 +172,18 @@ export default function QuienesSomosPage() {
 
               <h3 className="mt-5 text-lg font-semibold text-gray-900">Ejes temáticos</h3>
               <p className="text-gray-700 leading-relaxed">
-                El proyecto se organiza en torno a seis diagnósticos temáticos:
+                El proyecto se organiza en torno a nueve ejes temáticos:
               </p>
               <ol className="mt-2 list-decimal pl-5 text-gray-700 space-y-1">
                 <li><strong>Reforestación y restauración ecológica</strong> — bosques de tabaquillo (<em>Polylepis australis</em>), bosque chaqueño serrano, áreas degradadas y proyectos activos.</li>
+                <li><strong>Gestión hídrica</strong> — cuencas principales (San Roque, Los Molinos, Río Tercero), calidad de agua, zonas de recarga y lecciones de la crisis hídrica 2020-2022.</li>
                 <li><strong>Manejo del ganado</strong> — uso ganadero del suelo, umbrales de carga y su impacto en la vegetación nativa.</li>
                 <li><strong>Manejo del fuego</strong> — historial de incendios (en 2024 la provincia registró 586 incendios con 103.327 ha quemadas según IDECOR), zonas de riesgo y estrategias de prevención.</li>
-                <li><strong>Gestión hídrica</strong> — cuencas principales (San Roque, Los Molinos, Río Tercero), calidad de agua, zonas de recarga y lecciones de la crisis hídrica 2020-2022.</li>
+                <li><strong>Biodiversidad y especies invasoras</strong> — comunidades vegetales de la Pampa de Achala, composición florística, distribución de exóticas invasoras y mapas de vegetación.</li>
+                <li><strong>Cambio climático y dendrocronología</strong> — reconstrucción de procesos geomórficos, adaptación de especies arbóreas e implicaciones para la conservación.</li>
                 <li><strong>Ecoturismo y senderismo</strong> — red de senderos, capacidad de carga, puntos de interés, infraestructura y reconversión turística.</li>
                 <li><strong>Captación y mercados de carbono</strong> — estimaciones de stock de carbono, áreas potenciales y proyectos existentes.</li>
+                <li><strong>Propuestas normativas</strong> — marco legal vigente, ordenamiento territorial, regulación de actividades productivas e instrumentos para la protección de cuencas.</li>
               </ol>
 
               <h3 className="mt-5 text-lg font-semibold text-gray-900">Metodología</h3>
@@ -232,7 +235,7 @@ export default function QuienesSomosPage() {
               <h3 className="mt-5 text-lg font-semibold text-gray-900">Resultados esperados</h3>
               <ol className="mt-2 list-decimal pl-5 text-gray-700 space-y-1">
                 <li>Plataforma digital funcional (TRL 6) con diagnósticos integrados, capas georreferenciadas e interfaz de consulta para decisores, validada con usuarios reales.</li>
-                <li>Seis documentos de diagnóstico temático con estado del arte, mapeo de actores y análisis de brechas.</li>
+                <li>Nueve documentos de diagnóstico temático con estado del arte, mapeo de actores y análisis de brechas.</li>
                 <li>Informe final con recomendaciones de política pública para un plan integral de manejo de las Sierras Grandes.</li>
                 <li>Red articulada de expertos y actores territoriales vinculados a la plataforma.</li>
               </ol>
@@ -240,8 +243,8 @@ export default function QuienesSomosPage() {
               {/* Stats */}
               <div className="mt-6 grid gap-4 sm:grid-cols-4">
                 <div className="rounded-lg bg-green-50 p-4 text-center">
-                  <p className="text-2xl font-bold text-green-700">6</p>
-                  <p className="text-sm text-green-600">Diagnósticos temáticos</p>
+                  <p className="text-2xl font-bold text-green-700">9</p>
+                  <p className="text-sm text-green-600">Ejes temáticos</p>
                 </div>
                 <div className="rounded-lg bg-blue-50 p-4 text-center">
                   <p className="text-2xl font-bold text-blue-700">1,5 M</p>
