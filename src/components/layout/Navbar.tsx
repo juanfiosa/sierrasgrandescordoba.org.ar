@@ -48,7 +48,7 @@ export default function Navbar() {
           className="flex items-center gap-2 font-bold text-green-800"
         >
           <Mountain className="h-6 w-6" />
-          <span className="hidden sm:inline">Sierras Grandes</span>
+          <span className="hidden sm:inline">Grupo Sierras Grandes</span>
         </Link>
 
         {/* Desktop */}
