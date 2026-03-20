@@ -13,7 +13,7 @@ import MapGL, {
 } from "react-map-gl/maplibre";
 import type maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Layers, Eye, EyeOff, X } from "lucide-react";
+import { Layers, Eye, EyeOff, X, Map, Mountain, Satellite, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import areasProtegidas from "@/data/areas-protegidas.geojson";
@@ -21,8 +21,149 @@ import cuencas from "@/data/cuencas.geojson";
 import senderos from "@/data/senderos.geojson";
 import puntosInteres from "@/data/puntos-interes.geojson";
 import incendios from "@/data/incendios.geojson";
+import areaEstudio from "@/data/area-estudio.geojson";
 
-// Fallback style when CARTO tiles can't load
+// ── Base map styles ──
+interface BaseMapStyle {
+  id: string;
+  label: string;
+  icon: "map" | "satellite" | "mountain" | "mappin";
+  style: string | maplibregl.StyleSpecification;
+  preview: string; // CSS color for the preview swatch
+}
+
+const ESRI_SATELLITE_STYLE: maplibregl.StyleSpecification = {
+  version: 8,
+  name: "ESRI Satellite",
+  sources: {
+    "esri-satellite": {
+      type: "raster",
+      tiles: [
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      ],
+      tileSize: 256,
+      attribution: "© Esri, Maxar, Earthstar Geographics",
+      maxzoom: 19,
+    },
+  },
+  layers: [
+    { id: "esri-satellite-layer", type: "raster", source: "esri-satellite" },
+  ],
+};
+
+const OSM_STYLE: maplibregl.StyleSpecification = {
+  version: 8,
+  name: "OpenStreetMap",
+  sources: {
+    "osm-tiles": {
+      type: "raster",
+      tiles: [
+        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      ],
+      tileSize: 256,
+      attribution: "© OpenStreetMap contributors",
+      maxzoom: 19,
+    },
+  },
+  layers: [
+    { id: "osm-layer", type: "raster", source: "osm-tiles" },
+  ],
+};
+
+const ESRI_TOPO_STYLE: maplibregl.StyleSpecification = {
+  version: 8,
+  name: "Topográfico",
+  sources: {
+    "esri-topo": {
+      type: "raster",
+      tiles: [
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+      ],
+      tileSize: 256,
+      attribution: "© Esri, HERE, Garmin, USGS",
+      maxzoom: 19,
+    },
+  },
+  layers: [
+    { id: "esri-topo-layer", type: "raster", source: "esri-topo" },
+  ],
+};
+
+const HYBRID_STYLE: maplibregl.StyleSpecification = {
+  version: 8,
+  name: "Satélite + Calles",
+  sources: {
+    "esri-satellite": {
+      type: "raster",
+      tiles: [
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      ],
+      tileSize: 256,
+      attribution: "© Esri, Maxar, Earthstar Geographics",
+      maxzoom: 19,
+    },
+    "carto-labels": {
+      type: "raster",
+      tiles: [
+        "https://basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}@2x.png",
+      ],
+      tileSize: 256,
+      attribution: "© CARTO",
+      maxzoom: 19,
+    },
+  },
+  layers: [
+    { id: "esri-satellite-layer", type: "raster", source: "esri-satellite" },
+    { id: "carto-labels-layer", type: "raster", source: "carto-labels" },
+  ],
+};
+
+const baseMapStyles: BaseMapStyle[] = [
+  {
+    id: "osm",
+    label: "Calles",
+    icon: "map",
+    style: OSM_STYLE,
+    preview: "#e2e0d8",
+  },
+  {
+    id: "satellite",
+    label: "Satélite",
+    icon: "satellite",
+    style: ESRI_SATELLITE_STYLE,
+    preview: "#1a3a2a",
+  },
+  {
+    id: "hybrid",
+    label: "Híbrido",
+    icon: "mappin",
+    style: HYBRID_STYLE,
+    preview: "#2d5a3d",
+  },
+  {
+    id: "topo",
+    label: "Topográfico",
+    icon: "mountain",
+    style: ESRI_TOPO_STYLE,
+    preview: "#d4c9a8",
+  },
+  {
+    id: "positron",
+    label: "Claro",
+    icon: "map",
+    style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+    preview: "#f2f0eb",
+  },
+  {
+    id: "dark",
+    label: "Oscuro",
+    icon: "map",
+    style: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+    preview: "#2c2c2c",
+  },
+];
+
+// Fallback style when tiles can't load
 const FALLBACK_STYLE: maplibregl.StyleSpecification = {
   version: 8,
   name: "Blank",
@@ -106,10 +247,17 @@ export default function MapView({ className, interactive = true }: MapViewProps)
   const [layers, setLayers] = useState(defaultLayers);
   const [showPanel, setShowPanel] = useState(true);
   const [popup, setPopup] = useState<PopupInfo | null>(null);
-  const [mapStyle, setMapStyle] = useState<string | maplibregl.StyleSpecification>(
-    "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
-  );
+  const [activeBaseMap, setActiveBaseMap] = useState("osm");
+  const [mapStyle, setMapStyle] = useState<string | maplibregl.StyleSpecification>(OSM_STYLE);
   const [styleError, setStyleError] = useState(false);
+  const [showBaseMapPanel, setShowBaseMapPanel] = useState(false);
+
+  const switchBaseMap = useCallback((bm: BaseMapStyle) => {
+    setActiveBaseMap(bm.id);
+    setMapStyle(bm.style);
+    setStyleError(false);
+    setShowBaseMapPanel(false);
+  }, []);
 
   const toggleLayer = useCallback((id: string) => {
     setLayers((prev) =>
@@ -157,6 +305,24 @@ export default function MapView({ className, interactive = true }: MapViewProps)
         <NavigationControl position="top-right" />
         <ScaleControl position="bottom-left" />
         {interactive && <GeolocateControl position="top-right" />}
+
+        {/* Área de estudio — siempre visible, línea roja fina */}
+        <Source id="area-estudio" type="geojson" data={areaEstudio}>
+          <Layer
+            id="area-estudio-fill"
+            type="fill"
+            paint={{ "fill-color": "#dc2626", "fill-opacity": 0.04 }}
+          />
+          <Layer
+            id="area-estudio-line"
+            type="line"
+            paint={{
+              "line-color": "#dc2626",
+              "line-width": 2,
+              "line-dasharray": [4, 3],
+            }}
+          />
+        </Source>
 
         {layers
           .filter((l) => l.visible)
@@ -227,36 +393,144 @@ export default function MapView({ className, interactive = true }: MapViewProps)
       </MapGL>
 
       {interactive && (
-        <div className="absolute left-3 top-3 z-10">
-          <button
-            onClick={() => setShowPanel(!showPanel)}
-            className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm font-medium shadow-md hover:bg-gray-50"
-          >
-            <Layers className="h-4 w-4" />
-            Capas
-          </button>
+        <>
+          {/* Layers panel — top-left */}
+          <div className="absolute left-3 top-3 z-10">
+            <button
+              onClick={() => setShowPanel(!showPanel)}
+              className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm font-medium shadow-md hover:bg-gray-50"
+            >
+              <Layers className="h-4 w-4" />
+              Capas
+            </button>
 
-          {showPanel && (
-            <div className="mt-2 w-60 rounded-lg bg-white p-3 shadow-lg">
-              <h3 className="mb-2 text-xs font-semibold uppercase text-gray-500">Capas tematicas</h3>
-              {layers.map((layer) => (
-                <button
-                  key={layer.id}
-                  onClick={() => toggleLayer(layer.id)}
-                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-gray-50"
-                >
-                  {layer.visible ? (
-                    <Eye className="h-4 w-4 text-green-600" />
-                  ) : (
-                    <EyeOff className="h-4 w-4 text-gray-400" />
-                  )}
-                  <span className="h-3 w-3 rounded-sm" style={{ backgroundColor: layer.color }} />
-                  {layer.label}
-                </button>
-              ))}
+            {showPanel && (
+              <div className="mt-2 w-60 rounded-lg bg-white p-3 shadow-lg">
+                <h3 className="mb-2 text-xs font-semibold uppercase text-gray-500">Capas temáticas</h3>
+                {layers.map((layer) => (
+                  <button
+                    key={layer.id}
+                    onClick={() => toggleLayer(layer.id)}
+                    className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-gray-50"
+                  >
+                    {layer.visible ? (
+                      <Eye className="h-4 w-4 text-green-600" />
+                    ) : (
+                      <EyeOff className="h-4 w-4 text-gray-400" />
+                    )}
+                    <span className="h-3 w-3 rounded-sm" style={{ backgroundColor: layer.color }} />
+                    {layer.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Legend — cartographic style — top-right below nav controls */}
+          <div className="absolute right-3 top-28 z-10">
+            <div className="rounded-lg border border-gray-300 bg-white/95 px-3 py-2.5 shadow-sm backdrop-blur-sm">
+              <h4 className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-500">
+                Referencias
+              </h4>
+              <div className="space-y-1">
+                {/* Área de estudio */}
+                <div className="flex items-center gap-2">
+                  <svg width="24" height="10" className="shrink-0">
+                    <line
+                      x1="0" y1="5" x2="24" y2="5"
+                      stroke="#dc2626"
+                      strokeWidth="1.5"
+                      strokeDasharray="4,3"
+                    />
+                  </svg>
+                  <span className="text-[11px] text-gray-700">Límite área de estudio</span>
+                </div>
+                {/* Dynamic layer items */}
+                {layers
+                  .filter((l) => l.visible)
+                  .map((layer) => (
+                    <div key={layer.id} className="flex items-center gap-2">
+                      {layer.type === "fill" ? (
+                        <svg width="24" height="10" className="shrink-0">
+                          <rect
+                            x="0" y="0" width="24" height="10" rx="1"
+                            fill={layer.color}
+                            fillOpacity={0.4}
+                            stroke={layer.color}
+                            strokeWidth="1"
+                          />
+                        </svg>
+                      ) : layer.type === "line" ? (
+                        <svg width="24" height="10" className="shrink-0">
+                          <line
+                            x1="0" y1="5" x2="24" y2="5"
+                            stroke={layer.color}
+                            strokeWidth="2.5"
+                          />
+                        </svg>
+                      ) : (
+                        <svg width="24" height="10" className="shrink-0">
+                          <circle
+                            cx="12" cy="5" r="4"
+                            fill={layer.color}
+                            stroke="white"
+                            strokeWidth="1.5"
+                          />
+                        </svg>
+                      )}
+                      <span className="text-[11px] text-gray-700">{layer.label}</span>
+                    </div>
+                  ))}
+              </div>
             </div>
-          )}
-        </div>
+          </div>
+
+          {/* Base map style switcher — bottom-left */}
+          <div className="absolute bottom-8 left-3 z-10">
+            <button
+              onClick={() => setShowBaseMapPanel(!showBaseMapPanel)}
+              className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm font-medium shadow-md hover:bg-gray-50"
+            >
+              <Map className="h-4 w-4" />
+              Mapa base
+            </button>
+
+            {showBaseMapPanel && (
+              <div className="mb-2 w-72 rounded-lg bg-white p-3 shadow-lg" style={{ position: "absolute", bottom: "100%" }}>
+                <h3 className="mb-2 text-xs font-semibold uppercase text-gray-500">Tipo de mapa</h3>
+                <div className="grid grid-cols-3 gap-2">
+                  {baseMapStyles.map((bm) => {
+                    const isActive = activeBaseMap === bm.id;
+                    const IconComponent = bm.icon === "satellite" ? Satellite
+                      : bm.icon === "mountain" ? Mountain
+                      : bm.icon === "mappin" ? MapPin
+                      : Map;
+                    return (
+                      <button
+                        key={bm.id}
+                        onClick={() => switchBaseMap(bm)}
+                        className={cn(
+                          "flex flex-col items-center gap-1 rounded-lg border-2 p-2 text-xs font-medium transition-all hover:shadow-md",
+                          isActive
+                            ? "border-blue-500 bg-blue-50 text-blue-700"
+                            : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+                        )}
+                      >
+                        <div
+                          className="flex h-10 w-full items-center justify-center rounded"
+                          style={{ backgroundColor: bm.preview }}
+                        >
+                          <IconComponent className={cn("h-5 w-5", bm.preview === "#2c2c2c" || bm.preview === "#1a3a2a" || bm.preview === "#2d5a3d" ? "text-white" : "text-gray-600")} />
+                        </div>
+                        {bm.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </>
       )}
     </div>
   );
