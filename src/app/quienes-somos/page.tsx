@@ -12,6 +12,7 @@ import {
   ChevronDown,
   ChevronUp,
   User,
+  Download,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -146,36 +147,126 @@ export default function QuienesSomosPage() {
         {showProject && (
           <div className="mt-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
             <div className="prose prose-green max-w-none">
+              <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
+                Programa Córdoba Ciencia Productiva · Línea 2 — Proyectos de Innovación Pública · Convocatoria 2025
+              </p>
+
+              <h3 className="mt-3 text-lg font-semibold text-gray-900">Visión general</h3>
               <p className="text-gray-700 leading-relaxed">
-                La <strong>Plataforma Sierras Grandes de Córdoba</strong> es una iniciativa
-                colaborativa que busca articular conocimiento científico, técnico y comunitario
-                para la gestión integrada del macizo de las Sierras Grandes.
+                Las Sierras Grandes de Córdoba y sus valles adyacentes enfrentan desafíos ambientales
+                y socioeconómicos interrelacionados: degradación de la cubierta vegetal por incendios
+                recurrentes y sobrepastoreo, disminución progresiva de la capacidad de captación
+                hídrica en una región que abastece a más de <strong>1,5 millones de habitantes</strong>{" "}
+                a través de los embalses San Roque, Los Molinos y Río Tercero, y declive de la
+                actividad turística tradicional en localidades históricamente dependientes de ese sector.
               </p>
-              <p className="mt-4 text-gray-700 leading-relaxed">
-                Nuestro objetivo es generar un espacio digital abierto que concentre información
-                georreferenciada, publicaciones científicas, datos ambientales y contactos de
-                organizaciones, investigadores y actores locales vinculados a la conservación y
-                desarrollo sustentable de la región.
+              <p className="mt-3 text-gray-700 leading-relaxed">
+                Pese a la existencia de conocimiento científico-técnico significativo —disperso en
+                universidades, organismos públicos, ONGs y comunidades locales—, no existe un
+                instrumento que articule estos saberes y los ponga a disposición de los decisores
+                públicos de manera accesible, actualizada y operativa. Este proyecto propone
+                desarrollar una <strong>plataforma digital de gestión integrada del conocimiento</strong>{" "}
+                sobre las Sierras Grandes, orientada a facilitar la toma de decisiones públicas
+                basadas en evidencia.
               </p>
-              <p className="mt-4 text-gray-700 leading-relaxed">
-                El área de trabajo abarca desde las primeras estribaciones del macizo al sur
+
+              <h3 className="mt-5 text-lg font-semibold text-gray-900">Ejes temáticos</h3>
+              <p className="text-gray-700 leading-relaxed">
+                El proyecto se organiza en torno a seis diagnósticos temáticos:
+              </p>
+              <ol className="mt-2 list-decimal pl-5 text-gray-700 space-y-1">
+                <li><strong>Reforestación y restauración ecológica</strong> — bosques de tabaquillo (<em>Polylepis australis</em>), bosque chaqueño serrano, áreas degradadas y proyectos activos.</li>
+                <li><strong>Manejo del ganado</strong> — uso ganadero del suelo, umbrales de carga y su impacto en la vegetación nativa.</li>
+                <li><strong>Manejo del fuego</strong> — historial de incendios (en 2024 la provincia registró 586 incendios con 103.327 ha quemadas según IDECOR), zonas de riesgo y estrategias de prevención.</li>
+                <li><strong>Gestión hídrica</strong> — cuencas principales (San Roque, Los Molinos, Río Tercero), calidad de agua, zonas de recarga y lecciones de la crisis hídrica 2020-2022.</li>
+                <li><strong>Ecoturismo y senderismo</strong> — red de senderos, capacidad de carga, puntos de interés, infraestructura y reconversión turística.</li>
+                <li><strong>Captación y mercados de carbono</strong> — estimaciones de stock de carbono, áreas potenciales y proyectos existentes.</li>
+              </ol>
+
+              <h3 className="mt-5 text-lg font-semibold text-gray-900">Metodología</h3>
+              <p className="text-gray-700 leading-relaxed">
+                El proyecto contempla cuatro fases a lo largo de 12 meses:
+              </p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-lg border border-gray-200 p-3">
+                  <p className="text-sm font-semibold text-green-700">Fase 1 · Relevamiento (meses 1-3)</p>
+                  <p className="mt-1 text-xs text-gray-600">Revisión bibliográfica, entrevistas a informantes clave (investigadores, funcionarios, actores territoriales) y mapeo de actores mediante análisis de redes.</p>
+                </div>
+                <div className="rounded-lg border border-gray-200 p-3">
+                  <p className="text-sm font-semibold text-blue-700">Fase 2 · Diagnóstico (meses 3-6)</p>
+                  <p className="mt-1 text-xs text-gray-600">Talleres participativos con expertos por eje temático. Documentos de diagnóstico con marcos FODA y análisis de brechas. Georreferenciación mediante SIG.</p>
+                </div>
+                <div className="rounded-lg border border-gray-200 p-3">
+                  <p className="text-sm font-semibold text-purple-700">Fase 3 · Desarrollo tecnológico (meses 6-9)</p>
+                  <p className="mt-1 text-xs text-gray-600">Diseño con metodología ágil (Scrum). Desarrollo del prototipo web con herramientas de código abierto. Integración de capas georreferenciadas.</p>
+                </div>
+                <div className="rounded-lg border border-gray-200 p-3">
+                  <p className="text-sm font-semibold text-amber-700">Fase 4 · Validación (meses 9-12)</p>
+                  <p className="mt-1 text-xs text-gray-600">Prueba piloto con funcionarios del organismo público adoptante. Evaluación de usabilidad (SUS). Informe final con recomendaciones de política pública.</p>
+                </div>
+              </div>
+
+              <h3 className="mt-5 text-lg font-semibold text-gray-900">Área de trabajo</h3>
+              <p className="text-gray-700 leading-relaxed">
+                La zona de alcance abarca desde las primeras estribaciones del macizo al sur
                 (zona de Alpa Corral) hasta Cruz del Eje al norte, y desde la ruta que une
-                Mina Clavero con Merlo al oeste hasta la divisoria de aguas de las Sierras
-                Chicas al este.
+                Mina Clavero con Merlo — pasando por San Javier, Las Rosas y La Población — al
+                oeste, hasta la divisoria de aguas de las cumbres de las Sierras Chicas al este.
+                Esta delimitación aproximada puede verse en el{" "}
+                <a href="/mapa" className="text-green-700 underline hover:text-green-600">
+                  mapa interactivo
+                </a>{" "}
+                como una línea roja punteada.
               </p>
-              <div className="mt-6 grid gap-4 sm:grid-cols-3">
+
+              <h3 className="mt-5 text-lg font-semibold text-gray-900">Radicación institucional</h3>
+              <p className="text-gray-700 leading-relaxed">
+                El proyecto se radica en la <strong>Universidad Nacional de Córdoba</strong>, a
+                través del Centro de Investigaciones Jurídicas y Sociales (CIJS) de la Facultad
+                de Derecho, articulando saberes científicos con marcos regulatorios y diseño de
+                políticas públicas. El equipo multidisciplinario integra especialistas en ecología,
+                hidrología, turismo sustentable, mercados de carbono, desarrollo de software y
+                políticas públicas, junto con actores territoriales.
+              </p>
+
+              <h3 className="mt-5 text-lg font-semibold text-gray-900">Resultados esperados</h3>
+              <ol className="mt-2 list-decimal pl-5 text-gray-700 space-y-1">
+                <li>Plataforma digital funcional (TRL 6) con diagnósticos integrados, capas georreferenciadas e interfaz de consulta para decisores, validada con usuarios reales.</li>
+                <li>Seis documentos de diagnóstico temático con estado del arte, mapeo de actores y análisis de brechas.</li>
+                <li>Informe final con recomendaciones de política pública para un plan integral de manejo de las Sierras Grandes.</li>
+                <li>Red articulada de expertos y actores territoriales vinculados a la plataforma.</li>
+              </ol>
+
+              {/* Stats */}
+              <div className="mt-6 grid gap-4 sm:grid-cols-4">
                 <div className="rounded-lg bg-green-50 p-4 text-center">
                   <p className="text-2xl font-bold text-green-700">6</p>
-                  <p className="text-sm text-green-600">Ejes temáticos</p>
+                  <p className="text-sm text-green-600">Diagnósticos temáticos</p>
                 </div>
                 <div className="rounded-lg bg-blue-50 p-4 text-center">
-                  <p className="text-2xl font-bold text-blue-700">+200 km</p>
-                  <p className="text-sm text-blue-600">De norte a sur</p>
+                  <p className="text-2xl font-bold text-blue-700">1,5 M</p>
+                  <p className="text-sm text-blue-600">Habitantes beneficiados</p>
+                </div>
+                <div className="rounded-lg bg-purple-50 p-4 text-center">
+                  <p className="text-2xl font-bold text-purple-700">12</p>
+                  <p className="text-sm text-purple-600">Meses de ejecución</p>
                 </div>
                 <div className="rounded-lg bg-amber-50 p-4 text-center">
-                  <p className="text-2xl font-bold text-amber-700">Abierta</p>
-                  <p className="text-sm text-amber-600">Participación colaborativa</p>
+                  <p className="text-2xl font-bold text-amber-700">TRL 6</p>
+                  <p className="text-sm text-amber-600">Prototipo validado</p>
                 </div>
+              </div>
+
+              {/* Download button */}
+              <div className="mt-6 flex justify-center">
+                <a
+                  href="/Proyecto_Plataforma_Sierras_Grandes.docx"
+                  download="Proyecto_Plataforma_Sierras_Grandes.docx"
+                  className="inline-flex items-center gap-2 rounded-lg border-2 border-green-600 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 transition-colors hover:bg-green-50"
+                >
+                  <Download className="h-4 w-4" />
+                  Descargar proyecto completo (.docx)
+                </a>
               </div>
             </div>
           </div>
