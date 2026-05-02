@@ -8,6 +8,7 @@ import {
   Bug,
   Thermometer,
   Scale,
+  AlertTriangle,
 } from "lucide-react";
 
 export const metadata = {
@@ -126,6 +127,32 @@ const ejes = [
     ],
   },
   {
+    id: "conflictos-socioambientales",
+    icon: AlertTriangle,
+    title: "Conflictos Socioambientales",
+    color: "border-purple-500 bg-purple-50",
+    iconColor: "text-purple-700",
+    content: [
+      "Autovía de Punilla (2017–presente): autovía de 43,5 km sobre bosque nativo del Valle de Punilla. Destrucción de vegetación nativa, alteración de cursos de agua y sitios arqueológicos. En marzo de 2025, seis defensores ambientales fueron elevados a juicio oral en Cruz del Eje.",
+      "Minería metálica en Ischilín/Ongamira: proyecto de extracción de oro sobre ~20.000 ha en el Valle de Ongamira y Quebrada de Luna. Riesgo de contaminación de acuíferos con cianuro y otros tóxicos. En 2023 el gobierno provincial emitió una resolución prohibiendo la explotación en el área de las Cuevas de Ongamira.",
+      "Inundaciones de Sierras Chicas (febrero 2015): catástrofe donde la deforestación para barrios cerrados y el avance urbano en zonas de recarga detonaron inundaciones que dejaron 8 muertos, 250 viviendas destruidas y 2.200 afectadas. Organizaciones ciudadanas demandaron paralización de nuevos loteos en cuencas medias y altas.",
+      "Canteras y extracción de áridos: expansión de canteras en Sierras Grandes y Sierras Chicas con impactos equivalentes a la megaminería metálica. Asambleas ambientales relevaron y cartografiaron los conflictos activos en el Valle de Punilla (2018–2019).",
+      "Deforestación ilegal: casos documentados en San Alberto, San Marcos Sierras y otros departamentos. Desmonte de algarrobos, talas y breas para extracción de leña y habilitación de suelos productivos.",
+      "Organizaciones activas: Foro Ambiental Córdoba, Coordinadora Ambiental y de DDHH de Sierras Chicas, Asambleas Ambientales del Valle de Punilla, Sierras Chicas sin Canteras, Mesa de Comunidades Indígenas y Asambleas de los Valles de Córdoba.",
+    ],
+    subejesLabel: "Tipos de conflicto registrados:",
+    subejesBadge: "bg-purple-100 text-purple-700",
+    subejes: [
+      "Infraestructura vial",
+      "Minería metálica",
+      "Canteras y áridos",
+      "Deforestación y loteos",
+      "Conflictos hídricos",
+      "Incendios intencionales",
+      "Tierras y tenencia",
+    ],
+  },
+  {
     id: "normativa",
     icon: Scale,
     title: "Propuestas Normativas",
@@ -138,6 +165,8 @@ const ejes = [
       "Normativa sobre manejo del fuego y prevención de incendios.",
       "Instrumentos legales para la protección de cuencas y servicios ecosistémicos.",
     ],
+    subejesLabel: "Sub-ejes para proyectos de ley y propuestas:",
+    subejesBadge: "bg-indigo-100 text-indigo-700",
     subejes: [
       "Gestión Integral de las Sierras Grandes",
       "Reforestación y Restauración Ecológica",
@@ -157,7 +186,7 @@ export default function EjesPage() {
     <div className="mx-auto max-w-4xl px-4 py-12">
       <h1 className="text-3xl font-bold text-gray-900">Ejes Temáticos</h1>
       <p className="mt-2 text-gray-500">
-        Nueve líneas de diagnóstico y acción para la gestión integrada de las
+        Diez líneas de diagnóstico y acción para la gestión integrada de las
         Sierras Grandes.
       </p>
 
@@ -181,15 +210,15 @@ export default function EjesPage() {
               ))}
             </ul>
             {"subejes" in eje && eje.subejes && (
-              <div className="mt-5 border-t border-indigo-200 pt-4">
+              <div className="mt-5 border-t border-gray-200 pt-4">
                 <h3 className="text-sm font-semibold text-gray-700">
-                  Sub-ejes para proyectos de ley y propuestas:
+                  {"subejesLabel" in eje ? (eje as any).subejesLabel : "Sub-ejes:"}
                 </h3>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {(eje.subejes as string[]).map((sub, i) => (
                     <span
                       key={i}
-                      className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700"
+                      className={`rounded-full px-3 py-1 text-xs font-medium ${"subejesBadge" in eje ? (eje as any).subejesBadge : "bg-gray-100 text-gray-700"}`}
                     >
                       {sub}
                     </span>
