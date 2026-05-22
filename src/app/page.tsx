@@ -1,4 +1,5 @@
 import Image from "next/image";
+import WelcomePopup from "@/components/WelcomePopup";
 
 export default function Home() {
   return (
@@ -45,6 +46,8 @@ export default function Home() {
           quality={90}
         />
       </div>
+
+      <WelcomePopup />
 
       {/* Crédito de las fotos */}
       <div className="absolute bottom-3 right-3 z-10 rounded bg-black/40 px-2 py-1 text-xs text-white/70 backdrop-blur-sm">
