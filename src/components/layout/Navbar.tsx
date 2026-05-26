@@ -6,6 +6,7 @@ import {
   Mountain,
   Map,
   BarChart3,
+  BookOpen,
   Menu,
   X,
   LogIn,
@@ -32,6 +33,7 @@ const mainLinks = [
   { href: "/", label: "Inicio", icon: Mountain },
   { href: "/mapa", label: "Mapa", icon: Map },
   { href: "/ejes", label: "Ejes Temáticos", icon: BarChart3 },
+  { href: "/biblioteca", label: "Biblioteca", icon: BookOpen },
 ];
 
 const actoresLinks = [
