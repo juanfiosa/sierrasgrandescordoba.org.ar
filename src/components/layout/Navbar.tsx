@@ -20,6 +20,7 @@ import {
   ChevronDown,
   Network,
   Info,
+  Mail,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -153,6 +154,14 @@ export default function Navbar() {
             </Link>
           ))}
 
+          <a
+            href="mailto:gruposierrasgrandes@gmail.com"
+            className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-green-100 transition-colors hover:bg-green-600 hover:text-white"
+          >
+            <Mail className="h-4 w-4" />
+            Contacto
+          </a>
+
           <div className="ml-2 border-l border-green-600 pl-2">
             {user ? (
               <div className="flex items-center gap-2">
@@ -266,6 +275,15 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
+
+          <a
+            href="mailto:gruposierrasgrandes@gmail.com"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 rounded-md px-3 py-2.5 text-sm font-medium text-green-100"
+          >
+            <Mail className="h-4 w-4" />
+            Contacto
+          </a>
 
           <div className="mt-2 border-t border-green-600 pt-2">
             {user ? (
