@@ -247,14 +247,19 @@ export default function Navbar() {
                     {label}
                   </Link>
                 ))}
-                <a
-                  href="mailto:gruposierrasgrandes@gmail.com"
+                <Link
+                  href="/contacto"
                   onClick={closeAllDropdowns}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-green-100 transition-colors hover:bg-green-700 hover:text-white"
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 text-sm transition-colors",
+                    pathname === "/contacto"
+                      ? "bg-green-900/40 text-white"
+                      : "text-green-100 hover:bg-green-700 hover:text-white"
+                  )}
                 >
                   <Mail className="h-4 w-4" />
                   Contacto
-                </a>
+                </Link>
               </div>
             )}
           </div>
@@ -426,14 +431,17 @@ export default function Navbar() {
                   {label}
                 </Link>
               ))}
-              <a
-                href="mailto:gruposierrasgrandes@gmail.com"
+              <Link
+                href="/contacto"
                 onClick={() => { setOpen(false); setMobileNosotrosOpen(false); }}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-green-100"
+                className={cn(
+                  "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium",
+                  pathname === "/contacto" ? "bg-green-900/40 text-white" : "text-green-100"
+                )}
               >
                 <Mail className="h-4 w-4" />
                 Contacto
-              </a>
+              </Link>
             </div>
           )}
 
