@@ -55,7 +55,7 @@ export default function Home() {
         {avales.map((aval) => (
           <div
             key={aval.src}
-            className="rounded-xl bg-white/90 px-4 py-2 shadow-lg backdrop-blur-sm"
+            className={`rounded-xl px-4 py-2 shadow-lg backdrop-blur-sm ${aval.cardClassName}`}
           >
             <Image
               src={aval.src}
