@@ -51,19 +51,23 @@ export default function Home() {
       <WelcomePopup />
 
       {/* Avales institucionales */}
-      <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 flex-wrap items-center justify-center gap-x-6 gap-y-2 rounded-xl bg-white/90 px-5 py-2 shadow-lg backdrop-blur-sm">
-        <span className="hidden text-[10px] font-semibold uppercase tracking-wide text-gray-500 sm:inline">
+      <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 flex-wrap items-center justify-center gap-3">
+        <span className="hidden rounded-xl bg-white/90 px-3 py-2 text-[10px] font-semibold uppercase tracking-wide text-gray-500 shadow-lg backdrop-blur-sm sm:inline">
           Con el aval de
         </span>
         {avales.map((aval) => (
-          <Image
+          <div
             key={aval.src}
-            src={aval.src}
-            alt={aval.alt}
-            width={aval.width}
-            height={aval.height}
-            className="h-8 w-auto object-contain sm:h-9"
-          />
+            className="rounded-xl bg-white/90 px-4 py-2 shadow-lg backdrop-blur-sm"
+          >
+            <Image
+              src={aval.src}
+              alt={aval.alt}
+              width={aval.width}
+              height={aval.height}
+              className="h-10 w-auto object-contain sm:h-12"
+            />
+          </div>
         ))}
       </div>
 
