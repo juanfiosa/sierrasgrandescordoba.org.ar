@@ -52,9 +52,6 @@ export default function Home() {
 
       {/* Avales institucionales */}
       <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 flex-wrap items-center justify-center gap-3">
-        <span className="hidden rounded-xl bg-white/90 px-3 py-2 text-[10px] font-semibold uppercase tracking-wide text-gray-500 shadow-lg backdrop-blur-sm sm:inline">
-          Con el aval de
-        </span>
         {avales.map((aval) => (
           <div
             key={aval.src}
