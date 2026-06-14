@@ -1,5 +1,6 @@
 import Image from "next/image";
 import WelcomePopup from "@/components/WelcomePopup";
+import { avales } from "@/data/avales";
 
 export default function Home() {
   return (
@@ -48,6 +49,23 @@ export default function Home() {
       </div>
 
       <WelcomePopup />
+
+      {/* Avales institucionales */}
+      <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 flex-wrap items-center justify-center gap-x-6 gap-y-2 rounded-xl bg-white/90 px-5 py-2 shadow-lg backdrop-blur-sm">
+        <span className="hidden text-[10px] font-semibold uppercase tracking-wide text-gray-500 sm:inline">
+          Con el aval de
+        </span>
+        {avales.map((aval) => (
+          <Image
+            key={aval.src}
+            src={aval.src}
+            alt={aval.alt}
+            width={aval.width}
+            height={aval.height}
+            className="h-8 w-auto object-contain sm:h-9"
+          />
+        ))}
+      </div>
 
       {/* Crédito de las fotos */}
       <div className="absolute bottom-3 right-3 z-10 rounded bg-black/40 px-2 py-1 text-xs text-white/70 backdrop-blur-sm">
