@@ -11,6 +11,7 @@ interface AuthContextType {
   user: User | null;
   login: (username: string, password: string) => { ok: boolean; error?: string };
   register: (username: string, password: string, nombre: string) => { ok: boolean; error?: string };
+  recoverPassword: (username: string) => Promise<{ ok: boolean; error?: string }>;
   logout: () => void;
 }
 
@@ -82,8 +83,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(SESSION_KEY);
   }
 
+  async function recoverPassword(username: string) {
+    const users = getStoredUsers();
+    const found = users.find((u) => u.username === username);
+    if (!found) {
+      return { ok: false, error: "No encontramos una cuenta con ese correo en este dispositivo" };
+    }
+
+    try {
+      const res = await fetch("/api/recuperar-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: found.username,
+          password: found.password,
+          nombre: found.nombre,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        return { ok: false, error: data.error || "No se pudo enviar el correo" };
+      }
+
+      return { ok: true };
+    } catch {
+      return { ok: false, error: "No se pudo enviar el correo" };
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, recoverPassword, logout }}>
       {children}
     </AuthContext.Provider>
   );
