@@ -546,7 +546,7 @@ export const defaultPublicaciones: Publicacion[] = [
   },
   {
     id: "h04",
-    titulo: "Spatiotemporal monitoring of San Roque reservoir water quality using Sentinel-2 imagery",
+    titulo: "Space-time monitoring of water quality in an eutrophic reservoir using SENTINEL-2 data - A case study of San Roque, Argentina",
     tipo: "articulo",
     autores: "Germán, A., Shimoni, M., Beltramone, G., Rodríguez, M. I., Muchiut, J., Bonansea, M., Scavuzzo, M., & Ferral, A.",
     anio: 2021,
