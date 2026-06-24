@@ -50,6 +50,17 @@ export default function Home() {
 
       <WelcomePopup />
 
+      {/* Logo CIJS — arriba a la derecha, debajo del navbar */}
+      <div className="absolute right-3 top-[4.5rem] z-10 rounded-xl bg-white/90 px-3 py-2 shadow-lg backdrop-blur-sm">
+        <Image
+          src="/avales/cijs.jpg"
+          alt="CIJS — Centro de Investigaciones Jurídicas y Sociales (UNC)"
+          width={120}
+          height={120}
+          className="h-14 w-auto object-contain sm:h-16"
+        />
+      </div>
+
       {/* Avales institucionales */}
       <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 flex-wrap items-center justify-center gap-3">
         {avales.map((aval) => (
