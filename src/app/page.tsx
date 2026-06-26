@@ -50,24 +50,24 @@ export default function Home() {
 
       <WelcomePopup />
 
-      {/* Logos CIJS + IDEJUS — arriba a la derecha, contra el borde, debajo del navbar */}
-      <div className="absolute right-5 top-[4.5rem] z-10 flex items-stretch gap-2">
+      {/* Logos IDEJUS + CIJS — arriba a la derecha, debajo del navbar */}
+      <div className="absolute right-[4.75rem] top-[4.5rem] z-10 flex items-stretch gap-2">
+        <div className="flex items-center rounded-xl bg-white/90 px-3 py-2 shadow-lg backdrop-blur-sm">
+          <Image
+            src="/avales/idejus-blanco.png"
+            alt="CONICET — Universidad Nacional de Córdoba — IDEJUS"
+            width={720}
+            height={405}
+            className="h-[4.25rem] w-auto object-contain sm:h-[4.75rem]"
+          />
+        </div>
         <div className="flex items-center rounded-xl bg-white/90 px-3 py-2 shadow-lg backdrop-blur-sm">
           <Image
             src="/avales/cijs.jpg"
             alt="CIJS — Centro de Investigaciones Jurídicas y Sociales (UNC)"
             width={120}
             height={120}
-            className="h-14 w-auto object-contain sm:h-16"
-          />
-        </div>
-        <div className="flex items-center rounded-xl bg-[#0a2e52]/90 px-3 py-2 shadow-lg backdrop-blur-sm">
-          <Image
-            src="/avales/idejus-azul.png"
-            alt="CONICET — Universidad Nacional de Córdoba — IDEJUS"
-            width={403}
-            height={235}
-            className="h-14 w-auto object-contain sm:h-16"
+            className="h-[4.25rem] w-auto object-contain sm:h-[4.75rem]"
           />
         </div>
       </div>
