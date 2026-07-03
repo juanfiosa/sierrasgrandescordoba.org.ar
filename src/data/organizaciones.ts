@@ -7,6 +7,7 @@ export interface Organizacion {
   eje: string;
   web: string;
   instagram: string;
+  email: string;
   creadoPor: string;
 }
 
@@ -58,55 +59,60 @@ export const defaultOrganizaciones: Organizacion[] = [
     id: "org-1",
     nombre: "Acción Serrana",
     descripcion:
-      "ONG dedicada a la reforestación con especies nativas (tabaquillo, maitén) en las Sierras Grandes de Córdoba. Realizan jornadas de plantación comunitaria y educación ambiental.",
+      "Movimiento regional de reforestación con especies nativas (tabaquillo, maitén) en las Sierras Grandes de Córdoba. Realizan jornadas de plantación comunitaria y educación ambiental.",
     tipo: "civil",
     eje: "reforestacion",
-    web: "https://accionserrana.org",
+    web: "https://www.accionserrana.com",
     instagram: "https://instagram.com/accionserrana",
+    email: "info@accionserrana.com",
     creadoPor: "sistema",
   },
   {
     id: "org-2",
     nombre: "Ecosistemas Argentinos",
     descripcion:
-      "Organización que trabaja en restauración de bosques nativos en las sierras de Córdoba, con foco en la recuperación de cuencas degradadas y monitoreo de biodiversidad.",
+      "Asociación civil que trabaja en restauración de bosques nativos en las sierras de Córdoba, con foco en la recuperación de cuencas degradadas y monitoreo de biodiversidad.",
     tipo: "civil",
     eje: "reforestacion",
-    web: "https://ecosistemasarg.org.ar",
+    web: "https://www.ecosistemasarg.org.ar",
     instagram: "https://instagram.com/ecosistemasarg",
+    email: "ecosistemasarg@gmail.com",
     creadoPor: "sistema",
   },
   {
     id: "org-3",
     nombre: "Manos que Tejen Bosques",
     descripcion:
-      "Organización comunitaria que trabaja en la reforestación y restauración de bosques nativos en las Sierras de Córdoba a través de la participación colectiva.",
+      "Organización comunitaria que trabaja en la reforestación y restauración de bosques nativos en las Sierras de Córdoba (PN Quebrada del Condorito) a través de la participación colectiva.",
     tipo: "civil",
     eje: "reforestacion",
-    web: "",
+    web: "https://www.manosquetejenbosques.org",
     instagram: "https://instagram.com/manosquetejenbosques",
+    email: "",
     creadoPor: "sistema",
   },
   {
     id: "org-4",
     nombre: "Fundación CONYDES",
     descripcion:
-      "Fundación Conservación y Desarrollo que trabaja en proyectos de conservación de biodiversidad y desarrollo sustentable en las sierras de Córdoba.",
+      "Fundación Conservación y Desarrollo (Río Cuarto) que trabaja en conservación de biodiversidad, restauración de bosques nativos y desarrollo sustentable en las sierras del sur de Córdoba.",
     tipo: "civil",
     eje: "biodiversidad",
     web: "",
     instagram: "",
+    email: "fundacionconydes@gmail.com",
     creadoPor: "sistema",
   },
   {
     id: "org-5",
     nombre: "CERNAR – UNC",
     descripcion:
-      "Centro de Ecología y Recursos Naturales Renovables de la Universidad Nacional de Córdoba. Investigan ecología de bosques serranos, incendios, y restauración.",
+      "Centro de Ecología y Recursos Naturales Renovables \"Dr. Ricardo Luti\" de la Universidad Nacional de Córdoba. Investigan ecología de bosques serranos, incendios y restauración.",
     tipo: "civil",
     eje: "general",
-    web: "",
+    web: "https://fcefyn.unc.edu.ar/facultad/secretarias/investigacion-y-desarrollo/centros/centro-ecologia-y-recursos-naturales-renovables-cernar/",
     instagram: "",
+    email: "",
     creadoPor: "sistema",
   },
   {
@@ -118,6 +124,7 @@ export const defaultOrganizaciones: Organizacion[] = [
     eje: "general",
     web: "https://sierrasgrandes.ar",
     instagram: "",
+    email: "",
     creadoPor: "sistema",
   },
   {
@@ -129,17 +136,19 @@ export const defaultOrganizaciones: Organizacion[] = [
     eje: "biodiversidad",
     web: "https://www.argentina.gob.ar/parquesnacionales/quebradadelcondorito",
     instagram: "",
+    email: "",
     creadoPor: "sistema",
   },
   {
     id: "org-8",
     nombre: "Reserva Hídrica Provincial Pampa de Achala",
     descripcion:
-      "Área protegida provincial que resguarda las nacientes de los principales ríos y arroyos que alimentan los embalses de Córdoba.",
+      "Área protegida provincial que resguarda las nacientes de los principales ríos y arroyos que alimentan los embalses de Córdoba. Gestionada por la Secretaría de Ambiente de la Provincia.",
     tipo: "civil",
     eje: "hidrica",
-    web: "",
+    web: "https://ambiente.cba.gov.ar/areas-naturales-protegidas/",
     instagram: "",
+    email: "",
     creadoPor: "sistema",
   },
   {
@@ -151,6 +160,55 @@ export const defaultOrganizaciones: Organizacion[] = [
     eje: "fuego",
     web: "",
     instagram: "",
+    email: "",
+    creadoPor: "sistema",
+  },
+  {
+    id: "org-10",
+    nombre: "Club Andino Córdoba",
+    descripcion:
+      "Club de montañismo y trekking (fundado en 1935) que realiza travesías, escuela de montaña y actividades en las Sierras Grandes. Promueve el disfrute responsable y el cuidado de la montaña.",
+    tipo: "civil",
+    eje: "ecoturismo",
+    web: "https://clubandinocordoba.org",
+    instagram: "",
+    email: "info@clubandinocordoba.org",
+    creadoPor: "sistema",
+  },
+  {
+    id: "org-11",
+    nombre: "Fundación de Actividades Biosféricas (FundaciónAB)",
+    descripcion:
+      "Fundación con sede en Traslasierra. Su Centro de Restauración Ecológica y Educación Ambiental (CREEA) impulsa el proyecto \"Ordeñando Nubes\", de restauración de los bosques más altos en la Reserva Hídrica de Achala, Sierras Grandes.",
+    tipo: "civil",
+    eje: "reforestacion",
+    web: "https://www.fundacionab.org.ar",
+    instagram: "",
+    email: "",
+    creadoPor: "sistema",
+  },
+  {
+    id: "org-12",
+    nombre: "Aves Argentinas",
+    descripcion:
+      "Asociación ornitológica del Plata (BirdLife International en Argentina). Trabaja en la conservación del cóndor andino y de las Áreas de Importancia para la Conservación de las Aves (AICAs) en la Pampa de Achala y el PN Quebrada del Condorito.",
+    tipo: "civil",
+    eje: "biodiversidad",
+    web: "https://www.avesargentinas.org.ar",
+    instagram: "https://instagram.com/avesargentinas",
+    email: "info@avesargentinas.org.ar",
+    creadoPor: "sistema",
+  },
+  {
+    id: "org-13",
+    nombre: "Fundación Mil Aves",
+    descripcion:
+      "Organización cordobesa sin fines de lucro dedicada a la conservación de aves silvestres y sus ambientes, con educación ambiental y avistajes en la Pampa de Achala y las Sierras Grandes.",
+    tipo: "civil",
+    eje: "biodiversidad",
+    web: "https://milaves.org.ar",
+    instagram: "https://instagram.com/fundacionmilaves",
+    email: "",
     creadoPor: "sistema",
   },
 
@@ -164,6 +222,7 @@ export const defaultOrganizaciones: Organizacion[] = [
     eje: "ecoturismo",
     web: "",
     instagram: "",
+    email: "",
     creadoPor: "sistema",
   },
   {
@@ -175,6 +234,7 @@ export const defaultOrganizaciones: Organizacion[] = [
     eje: "ecoturismo",
     web: "",
     instagram: "",
+    email: "",
     creadoPor: "sistema",
   },
   {
@@ -186,6 +246,7 @@ export const defaultOrganizaciones: Organizacion[] = [
     eje: "ecoturismo",
     web: "",
     instagram: "",
+    email: "",
     creadoPor: "sistema",
   },
 ];

@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Instagram,
   Globe,
+  Mail,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -36,24 +37,26 @@ export default function OrganizacionesPage() {
   const [eje, setEje] = useState("general");
   const [web, setWeb] = useState("");
   const [instagram, setInstagram] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
+    // Las organizaciones del sistema se toman siempre frescas del archivo
+    // (así se reflejan altas, enlaces y correos nuevos). Se conservan solo
+    // las que haya agregado la persona usuaria en este navegador.
+    const civilesDefault = defaultOrganizaciones.filter((o) => o.tipo === "civil");
+    let agregadasPorUsuario: Organizacion[] = [];
     const stored = localStorage.getItem(ORGS_KEY);
     if (stored) {
       try {
-        setOrgs(JSON.parse(stored));
+        const parsed = JSON.parse(stored) as Organizacion[];
+        agregadasPorUsuario = parsed.filter((o) => o.creadoPor !== "sistema");
       } catch {
-        setOrgs(defaultOrganizaciones.filter((o) => o.tipo === "civil"));
-        localStorage.setItem(
-          ORGS_KEY,
-          JSON.stringify(defaultOrganizaciones.filter((o) => o.tipo === "civil"))
-        );
+        agregadasPorUsuario = [];
       }
-    } else {
-      const civiles = defaultOrganizaciones.filter((o) => o.tipo === "civil");
-      setOrgs(civiles);
-      localStorage.setItem(ORGS_KEY, JSON.stringify(civiles));
     }
+    const merged = [...agregadasPorUsuario, ...civilesDefault];
+    setOrgs(merged);
+    localStorage.setItem(ORGS_KEY, JSON.stringify(merged));
   }, []);
 
   const filtered =
@@ -70,6 +73,7 @@ export default function OrganizacionesPage() {
       eje,
       web: web.trim(),
       instagram: instagram.trim(),
+      email: email.trim(),
       creadoPor: user?.nombre || "anon",
     };
     const updated = [nueva, ...orgs];
@@ -80,6 +84,7 @@ export default function OrganizacionesPage() {
     setEje("general");
     setWeb("");
     setInstagram("");
+    setEmail("");
     setShowForm(false);
   }
 
@@ -196,6 +201,18 @@ export default function OrganizacionesPage() {
                 placeholder="https://instagram.com/..."
               />
             </div>
+            <div className="sm:col-span-2">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
+                Correo electr&oacute;nico
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-lg border px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+                placeholder="contacto@organizacion.org"
+              />
+            </div>
           </div>
           <button
             type="submit"
@@ -296,7 +313,16 @@ export default function OrganizacionesPage() {
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   )}
-                  {!org.web && !org.instagram && (
+                  {org.email && (
+                    <a
+                      href={`mailto:${org.email}`}
+                      className="flex items-center gap-1.5 rounded-lg bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700 transition-colors hover:bg-green-100"
+                    >
+                      <Mail className="h-3.5 w-3.5" />
+                      {org.email}
+                    </a>
+                  )}
+                  {!org.web && !org.instagram && !org.email && (
                     <span className="text-xs text-gray-400">
                       Sin enlaces disponibles
                     </span>

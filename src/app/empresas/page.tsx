@@ -73,6 +73,7 @@ export default function EmpresasPage() {
       eje,
       web: web.trim(),
       instagram: instagram.trim(),
+      email: "",
       creadoPor: user?.nombre || "anon",
     };
     const updated = [nueva, ...emps];
