@@ -1,6 +1,7 @@
 import Image from "next/image";
 import WelcomePopup from "@/components/WelcomePopup";
 import NovedadesSidebar from "@/components/NovedadesSidebar";
+import ComunidadSidebar from "@/components/ComunidadSidebar";
 import { avales } from "@/data/avales";
 
 export default function Home() {
@@ -53,6 +54,9 @@ export default function Home() {
 
       {/* Barra lateral de novedades (izquierda) — solo aparece si hay novedades activadas */}
       <NovedadesSidebar />
+
+      {/* Barra de comunidad / foro (derecha) */}
+      <ComunidadSidebar />
 
       {/* Logos IDEJUS + CIJS — arriba a la derecha, debajo del navbar */}
       <div className="absolute right-[4.75rem] top-[4.5rem] z-10 flex items-stretch gap-2">
