@@ -276,7 +276,7 @@ export default function ComunidadSidebar() {
                     <h3 className="text-sm font-semibold leading-snug text-gray-900">{p.titulo}</h3>
                     {p.cuerpo && (
                       <p
-                        className={`mt-1 whitespace-pre-line text-xs leading-relaxed text-gray-700 ${
+                        className={`mt-1 whitespace-pre-line text-sm leading-relaxed text-gray-900 ${
                           abierto ? "" : "line-clamp-3"
                         }`}
                       >
