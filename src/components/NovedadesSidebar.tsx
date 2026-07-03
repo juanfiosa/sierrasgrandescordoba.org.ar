@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Newspaper, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Novedad {
@@ -59,12 +59,12 @@ export default function NovedadesSidebar() {
   return (
     <aside className="absolute left-1/2 top-1/2 z-10 w-[85%] max-w-sm -translate-x-1/2 -translate-y-1/2 px-3 md:bottom-24 md:left-0 md:top-[4.5rem] md:w-1/5 md:min-w-[240px] md:max-w-none md:translate-x-0 md:translate-y-0">
       <div
-        className="flex max-h-[70vh] flex-col rounded-xl border border-emerald-200/60 bg-emerald-50/85 shadow-lg backdrop-blur-md md:h-full md:max-h-none"
+        className="flex max-h-[70vh] flex-col rounded-xl border border-green-300/70 bg-green-100/90 shadow-lg backdrop-blur-md md:h-full md:max-h-none"
         onMouseEnter={() => setPausado(true)}
         onMouseLeave={() => setPausado(false)}
       >
         {/* Encabezado */}
-        <div className="flex items-center justify-between gap-2 border-b border-emerald-200/70 px-4 py-3">
+        <div className="flex items-center justify-between gap-2 border-b border-green-300/70 px-4 py-3">
           <div className="flex items-center gap-2">
             <Newspaper className="h-5 w-5 text-green-700" />
             <h2 className="text-sm font-bold uppercase tracking-wide text-green-800">
@@ -76,14 +76,14 @@ export default function NovedadesSidebar() {
               <button
                 onClick={() => ir(-1)}
                 aria-label="Anterior"
-                className="rounded-full p-1 text-green-700 transition-colors hover:bg-emerald-100"
+                className="rounded-full p-1 text-green-700 transition-colors hover:bg-green-200"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 onClick={() => ir(1)}
                 aria-label="Siguiente"
-                className="rounded-full p-1 text-green-700 transition-colors hover:bg-emerald-100"
+                className="rounded-full p-1 text-green-700 transition-colors hover:bg-green-200"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -94,7 +94,7 @@ export default function NovedadesSidebar() {
         {/* Reel: una novedad por vez */}
         <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
           <article key={n.id} className="animate-[fadein_0.4s_ease]">
-            <p className="text-[11px] uppercase tracking-wider text-green-700/70">
+            <p className="text-[11px] uppercase tracking-wider text-green-700/80">
               {formatFecha(n.created_at)}
             </p>
             <h3 className="mt-0.5 text-sm font-semibold leading-snug text-gray-900">
@@ -105,7 +105,7 @@ export default function NovedadesSidebar() {
               <img
                 src={n.imagen}
                 alt={n.titulo}
-                className="mt-2 w-full rounded-lg border border-emerald-200/60 object-cover"
+                className="mt-2 w-full rounded-lg border border-green-300/60 object-cover"
               />
             )}
             {n.cuerpo && (
@@ -118,14 +118,14 @@ export default function NovedadesSidebar() {
 
         {/* Puntitos de navegación */}
         {varias && (
-          <div className="flex items-center justify-center gap-1.5 border-t border-emerald-200/70 py-2.5">
+          <div className="flex items-center justify-center gap-1.5 border-t border-green-300/70 py-2.5">
             {items.map((it, i) => (
               <button
                 key={it.id}
                 onClick={() => setIndex(i)}
                 aria-label={`Ir a la novedad ${i + 1}`}
                 className={`h-1.5 rounded-full transition-all ${
-                  i === actual ? "w-4 bg-green-600" : "w-1.5 bg-emerald-300 hover:bg-emerald-400"
+                  i === actual ? "w-4 bg-green-600" : "w-1.5 bg-green-300 hover:bg-green-400"
                 }`}
               />
             ))}
