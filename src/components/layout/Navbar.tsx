@@ -37,7 +37,7 @@ const mainLinks = [
 ];
 
 const actoresLinks = [
-  { href: "/organizaciones", label: "ONGs", icon: Users },
+  { href: "/organizaciones", label: "Organizaciones", icon: Users },
   { href: "/empresas", label: "Empresas", icon: Briefcase },
   { href: "/alojamientos", label: "Alojamientos", icon: Tent },
   { href: "/investigadores", label: "Investigadores", icon: GraduationCap },
