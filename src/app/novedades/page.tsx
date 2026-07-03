@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { Newspaper, Plus, Trash2, Eye, EyeOff, Loader2 } from "lucide-react";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { Newspaper, Plus, Trash2, Eye, EyeOff, Loader2, ImagePlus, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { isAdmin } from "@/lib/admins";
 
@@ -11,7 +11,38 @@ interface Novedad {
   cuerpo: string;
   mostrar: boolean;
   autor: string;
+  imagen?: string;
   created_at: string;
+}
+
+// Redimensiona y comprime la imagen en el navegador para no inflar la base de datos.
+async function comprimirImagen(file: File, maxDim = 1400, quality = 0.82): Promise<string> {
+  const dataUrl: string = await new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onload = () => res(fr.result as string);
+    fr.onerror = rej;
+    fr.readAsDataURL(file);
+  });
+  const img: HTMLImageElement = await new Promise((res, rej) => {
+    const i = new window.Image();
+    i.onload = () => res(i);
+    i.onerror = rej;
+    i.src = dataUrl;
+  });
+  let { width, height } = img;
+  if (width > maxDim || height > maxDim) {
+    const scale = maxDim / Math.max(width, height);
+    width = Math.round(width * scale);
+    height = Math.round(height * scale);
+  }
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d")!;
+  ctx.fillStyle = "#ffffff"; // fondo blanco por si el flyer es PNG con transparencia
+  ctx.fillRect(0, 0, width, height);
+  ctx.drawImage(img, 0, 0, width, height);
+  return canvas.toDataURL("image/jpeg", quality);
 }
 
 function formatFecha(iso: string) {
@@ -37,8 +68,11 @@ export default function NovedadesPage() {
   const [titulo, setTitulo] = useState("");
   const [cuerpo, setCuerpo] = useState("");
   const [mostrar, setMostrar] = useState(true);
+  const [imagen, setImagen] = useState("");
+  const [procesandoImg, setProcesandoImg] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const cargar = useCallback(async () => {
     setLoading(true);
@@ -69,7 +103,7 @@ export default function NovedadesPage() {
       const res = await fetch("/api/novedades", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ titulo, cuerpo, mostrar, autor: user?.nombre ?? "" }),
+        body: JSON.stringify({ titulo, cuerpo, mostrar, imagen, autor: user?.nombre ?? "" }),
       });
       if (!res.ok) {
         const d = await res.json().catch(() => ({}));
@@ -79,6 +113,7 @@ export default function NovedadesPage() {
       setTitulo("");
       setCuerpo("");
       setMostrar(true);
+      setImagen("");
       setShowForm(false);
       await cargar();
     } catch {
@@ -88,11 +123,33 @@ export default function NovedadesPage() {
     }
   }
 
+  async function onSelectImagen(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setError("");
+    setProcesandoImg(true);
+    try {
+      const comprimida = await comprimirImagen(file);
+      setImagen(comprimida);
+    } catch {
+      setError("No se pudo procesar la imagen");
+    } finally {
+      setProcesandoImg(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }
+
   async function toggleMostrar(n: Novedad) {
     await fetch("/api/novedades", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: n.id, titulo: n.titulo, cuerpo: n.cuerpo, mostrar: !n.mostrar }),
+      body: JSON.stringify({
+        id: n.id,
+        titulo: n.titulo,
+        cuerpo: n.cuerpo,
+        mostrar: !n.mostrar,
+        imagen: n.imagen ?? "",
+      }),
     });
     await cargar();
   }
@@ -149,6 +206,52 @@ export default function NovedadesPage() {
               placeholder="Contenido de la novedad"
             />
           </div>
+          {/* Foto / flyer */}
+          <div className="mb-4">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Foto o flyer <span className="font-normal text-gray-400">(opcional)</span>
+            </label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={onSelectImagen}
+              className="hidden"
+            />
+            {imagen ? (
+              <div className="relative inline-block">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={imagen}
+                  alt="Vista previa"
+                  className="max-h-56 rounded-lg border border-gray-200"
+                />
+                <button
+                  type="button"
+                  onClick={() => setImagen("")}
+                  title="Quitar imagen"
+                  className="absolute -right-2 -top-2 rounded-full bg-white p-1 text-gray-500 shadow ring-1 ring-gray-200 transition-colors hover:text-red-600"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={procesandoImg}
+                className="flex items-center gap-2 rounded-lg border border-dashed border-green-300 bg-white px-4 py-2.5 text-sm font-medium text-green-700 transition-colors hover:border-green-500 hover:bg-green-50 disabled:opacity-60"
+              >
+                {procesandoImg ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <ImagePlus className="h-4 w-4" />
+                )}
+                {procesandoImg ? "Procesando…" : "Subir foto o flyer"}
+              </button>
+            )}
+          </div>
+
           <label className="mb-4 flex items-center gap-2 text-sm text-gray-700">
             <input
               type="checkbox"
@@ -208,6 +311,14 @@ export default function NovedadesPage() {
                   <h2 className="mt-1 text-lg font-semibold text-gray-900">{n.titulo}</h2>
                   {n.cuerpo && (
                     <p className="mt-2 whitespace-pre-line text-gray-700">{n.cuerpo}</p>
+                  )}
+                  {n.imagen && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={n.imagen}
+                      alt={n.titulo}
+                      className="mt-3 max-h-96 rounded-lg border border-gray-200"
+                    />
                   )}
                 </div>
                 {admin && (

@@ -13,6 +13,8 @@ async function ensureTable() {
       created_at TIMESTAMPTZ DEFAULT now()
     )
   `;
+  // Columna para foto/flyer (data URL). Auto-migra tablas ya existentes.
+  await sql`ALTER TABLE novedades ADD COLUMN IF NOT EXISTS imagen TEXT DEFAULT ''`;
 }
 
 // GET — lista novedades. Con ?visibles=1 devuelve solo las marcadas para mostrar.
@@ -22,13 +24,13 @@ export async function GET(req: NextRequest) {
     const soloVisibles = req.nextUrl.searchParams.get("visibles") === "1";
     const rows = soloVisibles
       ? await sql`
-          SELECT id, titulo, cuerpo, mostrar, autor, created_at
+          SELECT id, titulo, cuerpo, mostrar, autor, imagen, created_at
           FROM novedades
           WHERE mostrar = true
           ORDER BY created_at DESC
         `
       : await sql`
-          SELECT id, titulo, cuerpo, mostrar, autor, created_at
+          SELECT id, titulo, cuerpo, mostrar, autor, imagen, created_at
           FROM novedades
           ORDER BY created_at DESC
         `;
@@ -44,19 +46,20 @@ export async function POST(req: NextRequest) {
   try {
     await ensureTable();
     const body = await req.json();
-    const { titulo, cuerpo, mostrar, autor } = body;
+    const { titulo, cuerpo, mostrar, autor, imagen } = body;
 
     if (!titulo?.trim()) {
       return NextResponse.json({ error: "El título es obligatorio" }, { status: 400 });
     }
 
     const rows = await sql`
-      INSERT INTO novedades (titulo, cuerpo, mostrar, autor)
+      INSERT INTO novedades (titulo, cuerpo, mostrar, autor, imagen)
       VALUES (
         ${titulo.trim()},
         ${(cuerpo || "").trim()},
         ${mostrar === false ? false : true},
-        ${(autor || "").trim()}
+        ${(autor || "").trim()},
+        ${imagen || ""}
       )
       RETURNING *
     `;
@@ -72,7 +75,7 @@ export async function PATCH(req: NextRequest) {
   try {
     await ensureTable();
     const body = await req.json();
-    const { id, titulo, cuerpo, mostrar } = body;
+    const { id, titulo, cuerpo, mostrar, imagen } = body;
 
     if (!id) {
       return NextResponse.json({ error: "Falta el id" }, { status: 400 });
@@ -85,7 +88,8 @@ export async function PATCH(req: NextRequest) {
       UPDATE novedades
       SET titulo = ${titulo.trim()},
           cuerpo = ${(cuerpo || "").trim()},
-          mostrar = ${mostrar === false ? false : true}
+          mostrar = ${mostrar === false ? false : true},
+          imagen = ${imagen || ""}
       WHERE id = ${id}
       RETURNING *
     `;
