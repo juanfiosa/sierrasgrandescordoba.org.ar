@@ -116,7 +116,7 @@ export const defaultOrganizaciones: Organizacion[] = [
       "Grupo interdisciplinario que articula conocimiento científico, técnico y comunitario para la gestión integrada de las Sierras Grandes de Córdoba.",
     tipo: "civil",
     eje: "general",
-    web: "",
+    web: "https://sierrasgrandes.ar",
     instagram: "",
     creadoPor: "sistema",
   },
