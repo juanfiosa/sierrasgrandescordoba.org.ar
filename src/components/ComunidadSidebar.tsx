@@ -165,8 +165,8 @@ export default function ComunidadSidebar() {
   }
 
   return (
-    <aside className="absolute bottom-24 right-0 top-52 z-10 hidden w-1/5 min-w-[240px] px-3 md:block">
-      <div className="flex h-full flex-col rounded-xl border border-green-300/70 bg-green-100/90 shadow-lg backdrop-blur-md">
+    <aside className="absolute bottom-24 right-0 top-[4.5rem] z-10 hidden w-1/5 min-w-[240px] px-3 md:block">
+      <div className="flex h-full flex-col rounded-xl border border-green-200/40 bg-green-100/30 shadow-lg backdrop-blur-md">
         {/* Encabezado */}
         <div className="flex items-center justify-between gap-2 border-b border-green-300/70 px-4 py-3">
           <div className="flex items-center gap-2">
@@ -198,7 +198,7 @@ export default function ComunidadSidebar() {
         <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
           {/* Aviso para no logueados */}
           {!user && (
-            <p className="mb-3 rounded-lg bg-white/70 px-3 py-2 text-xs text-gray-600">
+            <p className="mb-3 rounded-lg bg-white/60 px-3 py-2 text-xs text-gray-700">
               <Link href="/login" className="font-semibold text-green-700 underline">
                 Iniciá sesión
               </Link>{" "}
@@ -265,7 +265,7 @@ export default function ComunidadSidebar() {
                 return (
                   <article
                     key={p.id}
-                    className="rounded-lg border border-green-300/60 bg-white/80 p-3"
+                    className="rounded-lg border border-white/50 bg-white/55 p-3 backdrop-blur-sm"
                   >
                     <div className="mb-1 flex items-center justify-between gap-2">
                       <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${chip.chip}`}>

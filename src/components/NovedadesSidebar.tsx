@@ -59,7 +59,7 @@ export default function NovedadesSidebar() {
   return (
     <aside className="absolute left-1/2 top-1/2 z-10 w-[85%] max-w-sm -translate-x-1/2 -translate-y-1/2 px-3 md:bottom-24 md:left-0 md:top-[4.5rem] md:w-1/5 md:min-w-[240px] md:max-w-none md:translate-x-0 md:translate-y-0">
       <div
-        className="flex max-h-[70vh] flex-col rounded-xl border border-green-300/70 bg-green-100/90 shadow-lg backdrop-blur-md md:h-full md:max-h-none"
+        className="flex max-h-[70vh] flex-col rounded-xl border border-green-200/40 bg-green-100/30 shadow-lg backdrop-blur-md md:h-full md:max-h-none"
         onMouseEnter={() => setPausado(true)}
         onMouseLeave={() => setPausado(false)}
       >
