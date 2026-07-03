@@ -109,7 +109,7 @@ export default function NovedadesSidebar() {
               />
             )}
             {n.cuerpo && (
-              <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-800">
+              <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-900">
                 {n.cuerpo}
               </p>
             )}
