@@ -88,7 +88,7 @@ export const defaultOrganizaciones: Organizacion[] = [
     eje: "reforestacion",
     web: "https://www.manosquetejenbosques.org",
     instagram: "https://instagram.com/manosquetejenbosques",
-    email: "",
+    email: "manosquetejenbosques@gmail.com",
     creadoPor: "sistema",
   },
   {
@@ -112,7 +112,7 @@ export const defaultOrganizaciones: Organizacion[] = [
     eje: "general",
     web: "https://fcefyn.unc.edu.ar/facultad/secretarias/investigacion-y-desarrollo/centros/centro-ecologia-y-recursos-naturales-renovables-cernar/",
     instagram: "",
-    email: "",
+    email: "cernar.unc@gmail.com",
     creadoPor: "sistema",
   },
   {
@@ -136,7 +136,7 @@ export const defaultOrganizaciones: Organizacion[] = [
     eje: "biodiversidad",
     web: "https://www.argentina.gob.ar/parquesnacionales/quebradadelcondorito",
     instagram: "",
-    email: "",
+    email: "quebradadelcondorito@apn.gob.ar",
     creadoPor: "sistema",
   },
   {
@@ -208,7 +208,7 @@ export const defaultOrganizaciones: Organizacion[] = [
     eje: "biodiversidad",
     web: "https://milaves.org.ar",
     instagram: "https://instagram.com/fundacionmilaves",
-    email: "",
+    email: "contacto@milaves.org.ar",
     creadoPor: "sistema",
   },
 
