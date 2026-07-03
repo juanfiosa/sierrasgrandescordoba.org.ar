@@ -8,6 +8,8 @@ export const ADMIN_EMAILS: string[] = [
   "cecilia.suarez@mi.unc.edu.ar",
   "dramartajulia@gmail.com",
   "valentina.insua.chasseur@mi.unc.edu.ar",
+  "milagroskekutt@mi.unc.edu.ar",
+  "kekuttmilagros@hotmail.com",
 ];
 
 export function isAdmin(user: { username?: string } | null | undefined): boolean {
