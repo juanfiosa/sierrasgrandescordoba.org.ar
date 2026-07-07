@@ -3,41 +3,25 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export interface User {
-  username: string;
+  username: string; // el correo electrónico
   nombre: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (username: string, password: string) => { ok: boolean; error?: string };
-  register: (username: string, password: string, nombre: string) => { ok: boolean; error?: string };
-  recoverPassword: (username: string) => Promise<{ ok: boolean; error?: string }>;
+  login: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>;
+  register: (
+    email: string,
+    password: string,
+    nombre: string
+  ) => Promise<{ ok: boolean; error?: string }>;
+  recoverPassword: (email: string) => Promise<{ ok: boolean; error?: string }>;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-interface StoredUser {
-  username: string;
-  password: string;
-  nombre: string;
-}
-
-const USERS_KEY = "sg_users";
 const SESSION_KEY = "sg_session";
-
-function getStoredUsers(): StoredUser[] {
-  if (typeof window === "undefined") return [];
-  try {
-    return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function saveStoredUsers(users: StoredUser[]) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -53,63 +37,69 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  function login(username: string, password: string) {
-    const users = getStoredUsers();
-    const found = users.find(
-      (u) => u.username === username && u.password === password
-    );
-    if (!found) return { ok: false, error: "Usuario o contraseña incorrectos" };
-    const session: User = { username: found.username, nombre: found.nombre };
-    setUser(session);
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-    return { ok: true };
+  function guardarSesion(u: User) {
+    setUser(u);
+    localStorage.setItem(SESSION_KEY, JSON.stringify(u));
   }
 
-  function register(username: string, password: string, nombre: string) {
-    const users = getStoredUsers();
-    if (users.some((u) => u.username === username)) {
-      return { ok: false, error: "El usuario ya existe" };
+  async function login(email: string, password: string) {
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        return { ok: false, error: d.error || "No se pudo iniciar sesión" };
+      }
+      const u = await res.json();
+      guardarSesion({ username: u.username, nombre: u.nombre });
+      return { ok: true };
+    } catch {
+      return { ok: false, error: "No se pudo conectar con el servidor" };
     }
-    users.push({ username, password, nombre });
-    saveStoredUsers(users);
-    const session: User = { username, nombre };
-    setUser(session);
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-    return { ok: true };
+  }
+
+  async function register(email: string, password: string, nombre: string) {
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, nombre }),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        return { ok: false, error: d.error || "No se pudo crear la cuenta" };
+      }
+      const u = await res.json();
+      guardarSesion({ username: u.username, nombre: u.nombre });
+      return { ok: true };
+    } catch {
+      return { ok: false, error: "No se pudo conectar con el servidor" };
+    }
+  }
+
+  async function recoverPassword(email: string) {
+    try {
+      const res = await fetch("/api/auth/recover", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        return { ok: false, error: d.error || "No se pudo recuperar la contraseña" };
+      }
+      return { ok: true };
+    } catch {
+      return { ok: false, error: "No se pudo conectar con el servidor" };
+    }
   }
 
   function logout() {
     setUser(null);
     localStorage.removeItem(SESSION_KEY);
-  }
-
-  async function recoverPassword(username: string) {
-    const users = getStoredUsers();
-    const found = users.find((u) => u.username === username);
-    if (!found) {
-      return { ok: false, error: "No encontramos una cuenta con ese correo en este dispositivo" };
-    }
-
-    try {
-      const res = await fetch("/api/recuperar-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: found.username,
-          password: found.password,
-          nombre: found.nombre,
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        return { ok: false, error: data.error || "No se pudo enviar el correo" };
-      }
-
-      return { ok: true };
-    } catch {
-      return { ok: false, error: "No se pudo enviar el correo" };
-    }
   }
 
   return (

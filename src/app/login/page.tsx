@@ -18,6 +18,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [recoverSent, setRecoverSent] = useState(false);
   const [recoverLoading, setRecoverLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
 
   function switchMode(next: "login" | "register" | "recover") {
     setMode(next);
@@ -26,7 +27,7 @@ export default function LoginPage() {
     setPassword("");
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
@@ -46,10 +47,12 @@ export default function LoginPage() {
       }
     }
 
+    setAuthLoading(true);
     const result =
       mode === "login"
-        ? login(username.trim(), password)
-        : register(username.trim(), password, nombre.trim());
+        ? await login(username.trim(), password)
+        : await register(username.trim(), password, nombre.trim());
+    setAuthLoading(false);
 
     if (!result.ok) {
       setError(result.error || "Error desconocido");
@@ -238,9 +241,14 @@ export default function LoginPage() {
 
                 <button
                   type="submit"
-                  className="w-full rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-green-700"
+                  disabled={authLoading}
+                  className="w-full rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-green-700 disabled:opacity-60"
                 >
-                  {mode === "login" ? "Ingresar" : "Crear cuenta"}
+                  {authLoading
+                    ? "Procesando…"
+                    : mode === "login"
+                      ? "Ingresar"
+                      : "Crear cuenta"}
                 </button>
               </form>
 
