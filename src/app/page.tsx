@@ -58,8 +58,17 @@ export default function Home() {
       {/* Barra de comunidad / foro (derecha) */}
       <ComunidadSidebar />
 
-      {/* Logos IDEJUS + CIJS — arriba al centro, debajo del navbar */}
+      {/* Logos CCT CONICET Córdoba + IDEJUS + CIJS — arriba al centro, debajo del navbar */}
       <div className="absolute left-1/2 top-[4.5rem] z-10 flex -translate-x-1/2 items-stretch gap-2">
+        <div className="flex items-center rounded-xl bg-white/90 px-3 py-2 shadow-lg backdrop-blur-sm">
+          <Image
+            src="/avales/conicet-cordoba.png"
+            alt="CONICET Córdoba (CCT)"
+            width={1020}
+            height={891}
+            className="h-[4.25rem] w-auto object-contain sm:h-[4.75rem]"
+          />
+        </div>
         <div className="flex items-center rounded-xl bg-white/90 px-3 py-2 shadow-lg backdrop-blur-sm">
           <Image
             src="/avales/idejus-blanco.png"
