@@ -59,7 +59,7 @@ export default function Home() {
       <ComunidadSidebar />
 
       {/* Logos CCT CONICET Córdoba + IDEJUS + CIJS — arriba al centro, debajo del navbar */}
-      <div className="absolute left-1/2 top-[4.5rem] z-10 flex -translate-x-1/2 items-stretch gap-2">
+      <div className="absolute left-1/2 top-[4.5rem] z-10 flex max-w-[92vw] -translate-x-1/2 flex-wrap items-center justify-center gap-2 md:max-w-none md:flex-nowrap md:items-stretch">
         <div className="flex items-center rounded-xl bg-white/90 px-3 py-2 shadow-lg backdrop-blur-sm">
           <Image
             src="/avales/conicet-cordoba.png"
