@@ -71,19 +71,19 @@ export default function Home() {
         </div>
         <div className="flex items-center rounded-xl bg-white/90 px-3 py-2 shadow-lg backdrop-blur-sm">
           <Image
-            src="/avales/idejus-blanco.png"
+            src="/avales/idejus-fit.png"
             alt="CONICET — Universidad Nacional de Córdoba — IDEJUS"
-            width={720}
-            height={405}
+            width={543}
+            height={209}
             className="h-[4.25rem] w-auto object-contain sm:h-[4.75rem]"
           />
         </div>
         <div className="flex items-center rounded-xl bg-white/90 px-3 py-2 shadow-lg backdrop-blur-sm">
           <Image
-            src="/avales/cijs.jpg"
+            src="/avales/cijs-fit.png"
             alt="CIJS — Centro de Investigaciones Jurídicas y Sociales (UNC)"
-            width={120}
-            height={120}
+            width={296}
+            height={251}
             className="h-[4.25rem] w-auto object-contain sm:h-[4.75rem]"
           />
         </div>
